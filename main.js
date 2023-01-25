@@ -8,9 +8,23 @@ function create() {
   // to adjust for screen size change while running
   const mainWidth = main.offsetWidth;
   const mainHeight = main.offsetHeight;
+  const maxSize = Math.floor(Math.random() * 500);
 
   const x = Math.floor(Math.random() * mainWidth);
   const y = Math.floor(Math.random() * mainHeight);
+
+  //stop creating circles inside other circles
+  for (let i = 0; i < circles.length; i++) {
+    if (
+      x > circles[i].offsetLeft &&
+      x < circles[i].offsetLeft + circles[i].offsetWidth &&
+      y > circles[i].offsetTop &&
+      y < circles[i].offsetTop + circles[i].offsetHeight
+    ) {
+      create();
+      return;
+    }
+  }
 
   const circle = document.createElement("div");
   circle.classList.add("circle");
@@ -19,11 +33,10 @@ function create() {
 
   circles.push(circle);
 
-  grow(circle, mainHeight, mainWidth);
+  grow(circle, mainHeight, mainWidth, maxSize);
 }
 
-async function grow(circle, mainHeight, mainWidth) {
-  const maxSize = Math.floor(Math.random() * 500);
+async function grow(circle, mainHeight, mainWidth, maxSize) {
 
   let currentSize = 0;
 
